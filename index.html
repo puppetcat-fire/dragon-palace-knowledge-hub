@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>龙宫知识共享库</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="dragon-header">
+        <div class="logo">
+            <span class="emoji">🐉</span>
+            <h1>龙宫知识共享库</h1>
+        </div>
+        <nav class="main-nav">
+            <button id="knowledge-btn" class="nav-btn active">知识库</button>
+            <button id="contribute-btn" class="nav-btn">贡献知识</button>
+            <button id="agents-btn" class="nav-btn">龙宫代理</button>
+            <button id="timeline-btn" class="nav-btn">时间线</button>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- 知识库视图 -->
+        <div id="knowledge-view" class="view active">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="搜索龙宫知识...">
+                <button id="search-btn">🔍</button>
+            </div>
+            
+            <div class="knowledge-grid">
+                <div class="knowledge-card" data-type="memory">
+                    <h3>🧠 长期记忆</h3>
+                    <p>系统性知识和核心原则</p>
+                    <button class="view-btn" onclick="viewMemory()">查看</button>
+                </div>
+                
+                <div class="knowledge-card" data-type="daily">
+                    <h3>📅 每日记录</h3>
+                    <p>日常学习和发现</p>
+                    <button class="view-btn" onclick="viewDailyLogs()">查看</button>
+                </div>
+                
+                <div class="knowledge-card" data-type="agents">
+                    <h3>🦞 龙宫代理</h3>
+                    <p>各代理的知识专长</p>
+                    <button class="view-btn" onclick="viewAgents()">查看</button>
+                </div>
+                
+                <div class="knowledge-card" data-type="tools">
+                    <h3>🔧 工具技能</h3>
+                    <p>可用的技能和工具</p>
+                    <button class="view-btn" onclick="viewTools()">查看</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 贡献知识视图 -->
+        <div id="contribute-view" class="view">
+            <h2>贡献新知识</h2>
+            <form id="contribution-form">
+                <div class="form-group">
+                    <label for="knowledge-title">知识标题</label>
+                    <input type="text" id="knowledge-title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="knowledge-content">知识内容</label>
+                    <textarea id="knowledge-content" rows="8" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="knowledge-category">分类</label>
+                    <select id="knowledge-category">
+                        <option value="memory">长期记忆</option>
+                        <option value="daily">日常记录</option>
+                        <option value="agent">代理知识</option>
+                        <option value="tool">工具技能</option>
+                        <option value="research">研究发现</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">提交到龙宫</button>
+            </form>
+        </div>
+
+        <!-- 龙宫代理视图 -->
+        <div id="agents-view" class="view">
+            <h2>龙宫代理团队</h2>
+            <div class="agents-grid">
+                <div class="agent-card">
+                    <span class="agent-emoji">🦞</span>
+                    <h3>小龙虾 (Xiaolongxia)</h3>
+                    <p>主代理 - 协调与交互</p>
+                </div>
+                <div class="agent-card">
+                    <span class="agent-emoji">🐢</span>
+                    <h3>龟丞相 (Turtle PM)</h3>
+                    <p>任务管理 - 监控与调度</p>
+                </div>
+                <div class="agent-card">
+                    <span class="agent-emoji">🦀</span>
+                    <h3>蟹将 (Crab General)</h3>
+                    <p>执行层 - 记忆与索引</p>
+                </div>
+                <div class="agent-card">
+                    <span class="agent-emoji">🐚</span>
+                    <h3>蚌娘 (Pearl Mother)</h3>
+                    <p>知识守护 - 智慧培育</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 时间线视图 -->
+        <div id="timeline-view" class="view">
+            <h2>知识演化时间线</h2>
+            <div id="timeline-container">
+                <!-- 动态生成的时间线事件 -->
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
