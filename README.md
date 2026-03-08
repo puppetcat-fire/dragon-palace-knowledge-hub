@@ -1,71 +1,96 @@
-# Dragon Palace Knowledge Hub 🏯
+# Dragon Palace Knowledge Hub
 
-A self-hosted, offline-first knowledge sharing and collaboration platform built on the OpenClaw multi-agent architecture.
+围绕 `点亮事件` 构建的知识共建共享平台原型。
 
-## 🌟 Features
+## 当前规则
 
-- **Multi-agent Architecture**: Coordinated knowledge management with specialized agents (Xiaolongxia, Turtle PM, Crab General, Pearl Mother)
-- **Hybrid Search**: Combines BM25 full-text search with vector similarity search using local embedding models
-- **Knowledge Contribution System**: Collaborative knowledge building with contribution workflows
-- **Time-aware Knowledge Network**: Integrates temporal relationships between knowledge events ("Light-up" events)
-- **Offline-First**: Pure local operation with no external dependencies or cloud services required
-- **Privacy-Focused**: All data stays on your machine, no data exfiltration
+- `点亮` 是事件，不是资格布尔值。
+- 同一个用户可以在不同日期重复点亮同一个教程或节点。
+- 节点分两种：
+  - `personal`：个人节点，增删改查归所有者本人。
+  - `collective`：集体节点，由点亮过该节点的人投票治理。
+- 集体节点支持编辑、删除、拆分、合并提案。
+- 知识不收费，节点可以挂材料和工具入口。
 
-## 🚀 Quick Start
+## 本地运行
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/dragon-palace-knowledge-hub.git
-cd dragon-palace-knowledge-hub
-
-# Install dependencies (if needed for advanced features)
 npm install
-
-# Start the knowledge hub
-chmod +x start.sh
-./start.sh
-
-# Access in your browser
-http://localhost:8082
+npm start
 ```
 
-## 🏗️ Architecture
+打开 [http://localhost:8082](http://localhost:8082)。
 
-### Agent Roles
-- **🦞 Xiaolongxia (Main)**: Primary knowledge coordinator and user interaction
-- **🐢 Turtle PM**: Knowledge repository management and monitoring (runs every 5 minutes via cron)
-- **🦀 Crab General**: Execution layer for knowledge organization, storage, and vector index maintenance
-- **🐚 Pearl Mother**: Chief knowledge guardian responsible for wisdom preservation and insight generation
+## 主要接口
 
-### Technical Stack
-- **Search**: Hybrid BM25 + Vector Search (HNSW index)
-- **Embedding Model**: `embeddinggemma-300m-qat-Q8_0` (local 768-dimensional vectors)
-- **Storage**: Local file system with JSON-based knowledge representation
-- **API**: RESTful endpoints for integration with other tools
+### `GET /api/hub`
 
-## 🔗 Integration
+返回平台快照，包括：
 
-The knowledge hub integrates seamlessly with:
-- **Time Management System**: Track knowledge activities over time
-- **Habit Tracker**: Correlate learning habits with knowledge acquisition
-- **OpenClaw Ecosystem**: Works as part of the broader OpenClaw multi-agent system
+- 节点
+- 点亮流
+- 路径
+- 治理提案
+- 伙伴匹配
+- 下一步推荐
+- 材料入口
 
-## 📄 Documentation
+### `POST /api/illuminations`
 
-- [Architecture Overview](docs/architecture.md)
-- [API Reference](docs/api.md)
-- [Agent Configuration](docs/agents.md)
-- [Search Implementation](docs/search.md)
+手动提交一次点亮事件。
 
-## 🤝 Contributing
+### `POST /api/integrations/time-tracker`
 
-Contributions are welcome! Please see our [Contribution Guidelines](CONTRIBUTING.md).
+给时间记录仓使用的导入口。
 
-## 📜 License
+这个入口会校验 `light-up event` 契约，并且：
 
-MIT License - see [LICENSE](LICENSE) for details.
+- 只按 `source + externalEventId` 幂等
+- 不按 `用户 + 教程` 去重
 
-## 🙏 Acknowledgments
+所以“今天做一次，明天再做一次”会被记录成两次点亮事件。
 
-Built on the [OpenClaw](https://github.com/openclaw/openclaw) framework.
-Inspired by knowledge management principles and collaborative learning systems.
+### `GET /api/contracts/light-up-event`
+
+返回运行时契约：
+
+- schema
+- example
+- 幂等规则
+- 语义说明
+
+### 节点治理接口
+
+- `POST /api/nodes/:id/update`
+- `POST /api/nodes/:id/delete`
+- `POST /api/nodes/:id/split`
+- `POST /api/nodes/merge`
+- `POST /api/proposals/:id/votes`
+- `POST /api/votes`
+
+## 契约文件
+
+- [light-up-event.schema.json](/Users/xiaob/Documents/dragon-palace-knowledge-hub/docs/light-up-event.schema.json)
+- [light-up-event.example.json](/Users/xiaob/Documents/dragon-palace-knowledge-hub/docs/light-up-event.example.json)
+- [time-tracker-contract.md](/Users/xiaob/Documents/dragon-palace-knowledge-hub/docs/time-tracker-contract.md)
+
+## 推荐的事件格式
+
+```json
+{
+  "version": "1.0",
+  "source": "knowledge-habit-tracker",
+  "externalEventId": "habit_2026-03-07_001",
+  "displayName": "xiaob",
+  "startedAt": "2026-03-07T10:00:00+08:00",
+  "endedAt": "2026-03-07T11:10:00+08:00",
+  "summary": "把一套流程录成了可复现教程",
+  "nodeTitle": "录一段可复现的桌面教程",
+  "nodeScope": "collective",
+  "sequenceTitles": [
+    "做完一件事后立刻记下原始步骤",
+    "录一段可复现的桌面教程"
+  ],
+  "proofType": "artifact-backed"
+}
+```

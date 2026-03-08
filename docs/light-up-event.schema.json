@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://dragon-palace.local/contracts/light-up-event.schema.json",
+  "title": "LightUpEvent",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "version",
+    "source",
+    "externalEventId",
+    "displayName",
+    "nodeTitle",
+    "summary"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "externalEventId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "role": {
+      "type": "string"
+    },
+    "startedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "endedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nodeTitle": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nodeScope": {
+      "type": "string",
+      "enum": [
+        "personal",
+        "collective"
+      ]
+    },
+    "nodeDomain": {
+      "type": "string"
+    },
+    "nodeSummary": {
+      "type": "string"
+    },
+    "sequenceTitles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "proofType": {
+      "type": "string",
+      "enum": [
+        "self-claim",
+        "observed",
+        "artifact-backed",
+        "peer-backed"
+      ]
+    },
+    "artifactNote": {
+      "type": "string"
+    },
+    "materials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "merchant": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

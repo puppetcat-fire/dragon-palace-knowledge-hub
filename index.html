@@ -1,125 +1,270 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>龙宫知识共享库</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <header class="dragon-header">
-        <div class="logo">
-            <span class="emoji">🐉</span>
-            <h1>龙宫知识共享库</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dragon Palace Knowledge Hub</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">知识共建共享平台</p>
+          <h1>把一次真实点亮，长成一张能继续往上爬的节点网</h1>
+          <p class="hero-text">
+            点亮是事件，不是一次性徽章。今天做一次，明天再做一次，都算真实发生。系统再把这些事件沉淀成个人节点、集体节点、材料入口、伙伴关系和下一步推荐。
+          </p>
+          <div class="hero-loop" id="loop-list"></div>
         </div>
-        <nav class="main-nav">
-            <button id="knowledge-btn" class="nav-btn active">知识库</button>
-            <button id="contribute-btn" class="nav-btn">贡献知识</button>
-            <button id="agents-btn" class="nav-btn">龙宫代理</button>
-            <button id="timeline-btn" class="nav-btn">时间线</button>
-        </nav>
-    </header>
-
-    <main class="main-content">
-        <!-- 知识库视图 -->
-        <div id="knowledge-view" class="view active">
-            <div class="search-bar">
-                <input type="text" id="search-input" placeholder="搜索龙宫知识...">
-                <button id="search-btn">🔍</button>
-            </div>
-            
-            <div class="knowledge-grid">
-                <div class="knowledge-card" data-type="memory">
-                    <h3>🧠 长期记忆</h3>
-                    <p>系统性知识和核心原则</p>
-                    <button class="view-btn" onclick="viewMemory()">查看</button>
-                </div>
-                
-                <div class="knowledge-card" data-type="daily">
-                    <h3>📅 每日记录</h3>
-                    <p>日常学习和发现</p>
-                    <button class="view-btn" onclick="viewDailyLogs()">查看</button>
-                </div>
-                
-                <div class="knowledge-card" data-type="agents">
-                    <h3>🦞 龙宫代理</h3>
-                    <p>各代理的知识专长</p>
-                    <button class="view-btn" onclick="viewAgents()">查看</button>
-                </div>
-                
-                <div class="knowledge-card" data-type="tools">
-                    <h3>🔧 工具技能</h3>
-                    <p>可用的技能和工具</p>
-                    <button class="view-btn" onclick="viewTools()">查看</button>
-                </div>
-            </div>
+        <div class="hero-panel">
+          <h2>系统闭环</h2>
+          <ol class="loop-steps">
+            <li>时间先投入自己真正想做的事。</li>
+            <li>做成一次，就记成一次点亮事件。</li>
+            <li>平台把点亮沉淀成节点，并推荐下一爬。</li>
+          </ol>
+          <div class="hero-actions">
+            <a href="#new-light-up" class="primary-action">发起一次点亮</a>
+            <button type="button" id="reset-demo" class="secondary-action">恢复演示数据</button>
+          </div>
         </div>
+      </header>
 
-        <!-- 贡献知识视图 -->
-        <div id="contribute-view" class="view">
-            <h2>贡献新知识</h2>
-            <form id="contribution-form">
-                <div class="form-group">
-                    <label for="knowledge-title">知识标题</label>
-                    <input type="text" id="knowledge-title" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="knowledge-content">知识内容</label>
-                    <textarea id="knowledge-content" rows="8" required></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="knowledge-category">分类</label>
-                    <select id="knowledge-category">
-                        <option value="memory">长期记忆</option>
-                        <option value="daily">日常记录</option>
-                        <option value="agent">代理知识</option>
-                        <option value="tool">工具技能</option>
-                        <option value="research">研究发现</option>
-                    </select>
-                </div>
-                
-                <button type="submit" class="submit-btn">提交到龙宫</button>
+      <main>
+        <section class="stats-section" id="stats-grid"></section>
+
+        <section class="split-section">
+          <div class="panel">
+            <div class="section-head">
+              <p class="section-kicker">点亮流</p>
+              <h2>同一教程允许被同一个人反复点亮</h2>
+            </div>
+            <div id="feed-list" class="feed-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="section-head">
+              <p class="section-kicker">推荐下一步</p>
+              <h2>系统按依赖、热度和治理状态给出下一爬</h2>
+            </div>
+            <div id="recommendations" class="recommendations"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <p class="section-kicker">节点网</p>
+            <h2>个人节点归个人，集体节点归点亮者投票</h2>
+          </div>
+          <div id="paths" class="path-list"></div>
+          <div id="node-grid" class="node-grid"></div>
+        </section>
+
+        <section class="split-section">
+          <div class="panel">
+            <div class="section-head">
+              <p class="section-kicker">治理提案</p>
+              <h2>集体节点的改动、拆分、合并都走投票</h2>
+            </div>
+            <div id="proposal-list" class="feed-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="section-head">
+              <p class="section-kicker">天然伙伴</p>
+              <h2>爬相近节点的人，自然就是同伴</h2>
+            </div>
+            <div id="partner-list" class="partner-list"></div>
+          </div>
+        </section>
+
+        <section class="split-section">
+          <div class="panel">
+            <div class="section-head">
+              <p class="section-kicker">真实用户</p>
+              <h2>点亮免费，但要留下最基本的人和证明</h2>
+            </div>
+            <div id="trust-users" class="trust-list"></div>
+            <ul id="trust-rules" class="rule-list"></ul>
+          </div>
+
+          <div class="panel">
+            <div class="section-head">
+              <p class="section-kicker">带货位</p>
+              <h2>知识不收费，材料和工具跟着节点走</h2>
+            </div>
+            <div id="material-list" class="material-list"></div>
+          </div>
+        </section>
+
+        <section class="split-section">
+          <div class="panel">
+            <div class="section-head">
+              <p class="section-kicker">治理工作台</p>
+              <h2>方便地改、拆、并节点</h2>
+            </div>
+            <form id="node-update-form" class="illumination-form compact-form">
+              <label>
+                你的名字
+                <input type="text" name="requesterDisplayName" placeholder="例如：阿澈" required />
+              </label>
+              <label>
+                目标节点
+                <select name="nodeId" id="update-node-id"></select>
+              </label>
+              <label>
+                新标题
+                <input type="text" name="title" placeholder="不改可留空" />
+              </label>
+              <label>
+                新领域
+                <input type="text" name="domain" placeholder="例如：knowledge-share" />
+              </label>
+              <label class="full-span">
+                新说明
+                <textarea name="summary" rows="3" placeholder="只填需要更新的部分"></textarea>
+              </label>
+              <label class="full-span">
+                新材料
+                <textarea name="materials" rows="3" placeholder="每行：材料名 | 用途 | 商家 | 链接"></textarea>
+              </label>
+              <button type="submit" class="primary-action submit-action">提交改动或发起提案</button>
             </form>
-        </div>
 
-        <!-- 龙宫代理视图 -->
-        <div id="agents-view" class="view">
-            <h2>龙宫代理团队</h2>
-            <div class="agents-grid">
-                <div class="agent-card">
-                    <span class="agent-emoji">🦞</span>
-                    <h3>小龙虾 (Xiaolongxia)</h3>
-                    <p>主代理 - 协调与交互</p>
-                </div>
-                <div class="agent-card">
-                    <span class="agent-emoji">🐢</span>
-                    <h3>龟丞相 (Turtle PM)</h3>
-                    <p>任务管理 - 监控与调度</p>
-                </div>
-                <div class="agent-card">
-                    <span class="agent-emoji">🦀</span>
-                    <h3>蟹将 (Crab General)</h3>
-                    <p>执行层 - 记忆与索引</p>
-                </div>
-                <div class="agent-card">
-                    <span class="agent-emoji">🐚</span>
-                    <h3>蚌娘 (Pearl Mother)</h3>
-                    <p>知识守护 - 智慧培育</p>
-                </div>
+            <form id="node-split-form" class="illumination-form compact-form">
+              <label>
+                你的名字
+                <input type="text" name="requesterDisplayName" placeholder="例如：阿澈" required />
+              </label>
+              <label>
+                要拆的节点
+                <select name="nodeId" id="split-node-id"></select>
+              </label>
+              <label class="full-span">
+                拆出的子节点
+                <textarea name="childNodes" rows="4" placeholder="每行：标题 | 说明 | 领域" required></textarea>
+              </label>
+              <label class="checkbox-row full-span">
+                <input type="checkbox" name="replaceOriginal" />
+                用新节点替换原节点
+              </label>
+              <button type="submit" class="secondary-action submit-action">拆分节点</button>
+            </form>
+
+            <form id="node-merge-form" class="illumination-form compact-form">
+              <label>
+                你的名字
+                <input type="text" name="requesterDisplayName" placeholder="例如：阿澈" required />
+              </label>
+              <label>
+                合并后标题
+                <input type="text" name="title" placeholder="例如：整理教程的结构卡" required />
+              </label>
+              <label class="full-span">
+                选择要合并的节点
+                <select name="sourceNodeIds" id="merge-node-ids" multiple size="6"></select>
+              </label>
+              <label>
+                合并后领域
+                <input type="text" name="domain" placeholder="例如：knowledge-share" />
+              </label>
+              <label class="full-span">
+                合并后说明
+                <textarea name="summary" rows="3" placeholder="可留空，系统会自动拼接原说明"></textarea>
+              </label>
+              <button type="submit" class="secondary-action submit-action">合并节点</button>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="section-head">
+              <p class="section-kicker">联动接口</p>
+              <h2>时间管理仓只要提交事件，不要硬耦合</h2>
             </div>
-        </div>
+            <ul id="integration-hooks" class="rule-list"></ul>
+          </div>
+        </section>
 
-        <!-- 时间线视图 -->
-        <div id="timeline-view" class="view">
-            <h2>知识演化时间线</h2>
-            <div id="timeline-container">
-                <!-- 动态生成的时间线事件 -->
-            </div>
-        </div>
-    </main>
+        <section class="panel form-panel" id="new-light-up">
+          <div class="section-head">
+            <p class="section-kicker">新点亮</p>
+            <h2>提交一次可复现的真实行动</h2>
+          </div>
+          <form id="illumination-form" class="illumination-form">
+            <label>
+              你的名字
+              <input type="text" name="displayName" placeholder="例如：阿澈" required />
+            </label>
+            <label>
+              你的角色
+              <input type="text" name="role" placeholder="例如：流程整理 / 空间改造 / 时间实验" />
+            </label>
+            <label>
+              这次点亮的节点
+              <input type="text" name="nodeTitle" placeholder="例如：把流程录成 5 分钟教程" required />
+            </label>
+            <label>
+              节点类型
+              <select name="nodeScope">
+                <option value="collective">集体节点</option>
+                <option value="personal">个人节点</option>
+              </select>
+            </label>
+            <label>
+              节点领域
+              <input type="text" name="nodeDomain" placeholder="例如：knowledge-share / maker / community" />
+            </label>
+            <label>
+              节点说明
+              <textarea name="nodeSummary" rows="3" placeholder="一句话说清这个节点为什么值得存在"></textarea>
+            </label>
+            <label class="full-span">
+              这次做成了什么
+              <textarea name="summary" rows="4" placeholder="描述这次真实发生的点亮行为" required></textarea>
+            </label>
+            <label>
+              本次爬升路径
+              <input type="text" name="sequenceTitles" placeholder="用逗号分隔，例如：记步骤,录教程,整理成节点" />
+            </label>
+            <label>
+              证明等级
+              <select name="proofType">
+                <option value="artifact-backed">带作品</option>
+                <option value="peer-backed">同伴共签</option>
+                <option value="observed">被观察到</option>
+                <option value="self-claim">仅自述</option>
+              </select>
+            </label>
+            <label>
+              开始时间
+              <input type="datetime-local" name="startedAt" />
+            </label>
+            <label>
+              结束时间
+              <input type="datetime-local" name="endedAt" />
+            </label>
+            <label class="full-span">
+              证明备注
+              <textarea name="artifactNote" rows="3" placeholder="例如：录屏、现场签名、时间日志映射、材料照片"></textarea>
+            </label>
+            <label class="full-span">
+              材料入口
+              <textarea name="materials" rows="4" placeholder="每行：材料名 | 用途 | 商家 | 链接"></textarea>
+            </label>
+            <button type="submit" class="primary-action submit-action">提交点亮</button>
+          </form>
+        </section>
+      </main>
+    </div>
 
-    <script src="script.js"></script>
-</body>
+    <template id="stat-card-template">
+      <article class="stat-card">
+        <p class="stat-label"></p>
+        <strong class="stat-value"></strong>
+      </article>
+    </template>
+
+    <script src="/script.js"></script>
+  </body>
 </html>

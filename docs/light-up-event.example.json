@@ -1,0 +1,31 @@
+{
+  "version": "1.0",
+  "source": "knowledge-habit-tracker",
+  "externalEventId": "habit_2026-03-07_001",
+  "displayName": "xiaob",
+  "role": "maker",
+  "startedAt": "2026-03-07T10:00:00+08:00",
+  "endedAt": "2026-03-07T11:10:00+08:00",
+  "summary": "把一套流程录成了可复现教程",
+  "nodeTitle": "录一段可复现的桌面教程",
+  "nodeScope": "collective",
+  "nodeDomain": "knowledge-share",
+  "sequenceTitles": [
+    "做完一件事后立刻记下原始步骤",
+    "录一段可复现的桌面教程"
+  ],
+  "proofType": "artifact-backed",
+  "artifactNote": "附录屏和步骤文档",
+  "materials": [
+    {
+      "name": "USB 麦克风",
+      "purpose": "录讲解",
+      "merchant": "创作设备馆",
+      "link": "https://merchant.example/mic"
+    }
+  ],
+  "tags": [
+    "tutorial",
+    "desk-demo"
+  ]
+}
